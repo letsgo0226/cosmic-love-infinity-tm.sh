@@ -1,0 +1,32 @@
+name: cosmic-love-infinity-tm
+on:
+  push:
+  workflow_dispatch:
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: step verify rewind
+        run: |
+          set -e
+          N=40 CMD=step sh cosmic-love-infinity-tm.sh > out.json
+          python3 - <<'PY'
+          import json
+          o=json.load(open("out.json"))
+          assert o["model"]=="COSMIC_LOVE_INFINITY_TM"
+          assert o["H_s"]==0 and o["C"] is True
+          assert o["t"]==40 and sum(o["E"])==40 and o["n"]==o["E"][3]
+          PY
+          CMD=verify sh cosmic-love-infinity-tm.sh > v.json
+          python3 - <<'PY'
+          import json
+          o=json.load(open("v.json"))
+          assert o["CF"] is True and o["H_s"]==0
+          PY
+          N=3 CMD=rewind sh cosmic-love-infinity-tm.sh > r.json
+          python3 - <<'PY'
+          import json
+          o=json.load(open("r.json"))
+          assert o["t"]==37 and o["CF"] is True and o["H_s"]==0
+          PY
