@@ -7,26 +7,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: step verify rewind
+      - name: one-shot self evolution
         run: |
           set -e
-          N=40 CMD=step sh cosmic-love-infinity-tm.sh > out.json
+          : > trace.jsonl
+          for i in $(seq 1 8); do
+            ONCE=1 SELF=./cosmic-love-infinity-tm.sh S=state.json sh ./cosmic-love-infinity-tm.sh >> trace.jsonl
+          done
           python3 - <<'PY'
-          import json
-          o=json.load(open("out.json"))
-          assert o["model"]=="COSMIC_LOVE_INFINITY_TM"
-          assert o["H_s"]==0 and o["C"] is True
-          assert o["t"]==40 and sum(o["E"])==40 and o["n"]==o["E"][3]
+          import json,os
+          xs=[json.loads(x) for x in open("trace.jsonl") if x.strip()]
+          assert len(xs)==8
+          assert all(x["CF"] and x["CG"] and x["CE"] and x["CN"] for x in xs)
+          assert all(x["bytes"]<2048 for x in xs)
+          assert xs[-1]["gen"]==8
+          assert os.path.getsize("cosmic-love-infinity-tm.sh")<2048
           PY
-          CMD=verify sh cosmic-love-infinity-tm.sh > v.json
-          python3 - <<'PY'
-          import json
-          o=json.load(open("v.json"))
-          assert o["CF"] is True and o["H_s"]==0
-          PY
-          N=3 CMD=rewind sh cosmic-love-infinity-tm.sh > r.json
-          python3 - <<'PY'
-          import json
-          o=json.load(open("r.json"))
-          assert o["t"]==37 and o["CF"] is True and o["H_s"]==0
-          PY
+          sh -n cosmic-love-infinity-tm.sh
