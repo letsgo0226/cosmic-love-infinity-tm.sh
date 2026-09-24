@@ -2,7 +2,7 @@
 
 Prime-index Turing machine with Gödel event encoding and a symbolic Love layer.
 
-Repo is a formal / symbolic runtime. It does **not** prove RH, GRH, a physical TOE, or any external-world outcome.
+Repo is a formal / symbolic runtime. It does **not** prove RH, GRH, a physical TOE, physical zero entropy, universal love, or any external-world outcome.
 
 | Artifact | Role |
 |----------|------|
@@ -11,6 +11,8 @@ Repo is a formal / symbolic runtime. It does **not** prove RH, GRH, a physical T
 | `COSMIC_LOVE_INFINITY_TM_2KB_ONELINER.sh` | Same carrier, family name |
 | `cosmic-love-infinity-tm.PROTOCOL.md` | State, commands, certificates |
 | `cosmic-love-infinity-tm.DAEMON.sh` | Resident tick wrapper |
+| `cosmic-love-chomsky-godel.sh` | Chomsky–Gödel zero-ambiguity + model-continuation sidecar |
+| `cosmic_love_model_certificate.py` | Conditional internal continuation certificate |
 | `.github/workflows/cosmic-love-infinity-tm.yml` | Actions smoke test |
 
 ## 2KB one-liner
@@ -28,3 +30,29 @@ CMD=zero sh cosmic-love-infinity-tm.oneliner.sh
 `CMD` first letter: `s` step, `r` rewind, `v` verify, `z` reset.
 
 `H_s=0` means the finite internal checks closed. It does not mean entropy is physically zero.
+
+## Chomsky–Gödel continuation certificate
+
+The `<2KB` Prime–Gödel core is left unchanged. The sidecar recognizes only:
+
+```text
+S -> STEP S | REWIND S | epsilon
+```
+
+For a requested transition:
+
+```text
+C_CL = CF ∧ CR ∧ CG ∧ CE ∧ C_direction
+```
+
+When `C_CL=true`, the wrapper emits:
+
+```text
+H_struct=0
+zero_ambiguity=true
+model_transition_certainty=1
+H_model=0
+P_real_world=null
+```
+
+`model_transition_certainty=1` means only that the requested finite internal transition is uniquely determined and consistent with the reversible Prime–Gödel model. It is **not** a probability claim about the physical universe or any social/psychological outcome.
