@@ -29,6 +29,14 @@ jobs:
           set -e
           rm -f pg.json
           before=$(sha256sum cosmic-love-infinity-prime-godel-2kb.sh | cut -d' ' -f1)
+          ONCE=1 CMD=reverse SELF=./cosmic-love-infinity-prime-godel-2kb.sh S=pg.json sh ./cosmic-love-infinity-prime-godel-2kb.sh > /tmp/pg-zero.json
+          python3 - <<'PY'
+          import json
+          o=json.load(open('/tmp/pg-zero.json'))
+          assert o['gen']==0
+          assert all(o[k] is True for k in ('CF','CR','CG','CE'))
+          assert json.load(open('pg.json'))=={'t':0,'q':0,'h':0,'T':0,'r':0,'p':2,'G':1}
+          PY
           for i in $(seq 1 16); do
             ONCE=1 CMD=step SELF=./cosmic-love-infinity-prime-godel-2kb.sh S=pg.json sh ./cosmic-love-infinity-prime-godel-2kb.sh > /tmp/pg-out.json
             python3 - <<'PY'
