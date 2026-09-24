@@ -24,3 +24,35 @@ jobs:
           assert os.path.getsize("cosmic-love-infinity-tm.sh")<2048
           PY
           sh -n cosmic-love-infinity-tm.sh
+      - name: Prime-Godel intrinsic reversible path
+        run: |
+          set -e
+          rm -f pg.json
+          before=$(sha256sum cosmic-love-infinity-prime-godel-2kb.sh | cut -d' ' -f1)
+          for i in $(seq 1 16); do
+            ONCE=1 CMD=step SELF=./cosmic-love-infinity-prime-godel-2kb.sh S=pg.json sh ./cosmic-love-infinity-prime-godel-2kb.sh > /tmp/pg-out.json
+            python3 - <<'PY'
+          import json
+          o=json.load(open('/tmp/pg-out.json'))
+          assert all(o[k] is True for k in ('CF','CR','CG','CE'))
+          assert o['bytes'] < 2048
+          PY
+          done
+          python3 - <<'PY'
+          import json
+          s=json.load(open('pg.json'))
+          assert s['t']==16 and int(s['G'])>1 and s['p']>2 and 'J' not in s
+          PY
+          for i in $(seq 1 16); do
+            ONCE=1 CMD=reverse SELF=./cosmic-love-infinity-prime-godel-2kb.sh S=pg.json sh ./cosmic-love-infinity-prime-godel-2kb.sh > /tmp/pg-out.json
+          done
+          python3 - <<'PY'
+          import json
+          s=json.load(open('pg.json'))
+          assert s=={'t':0,'q':0,'h':0,'T':0,'r':0,'p':2,'G':1}
+          o=json.load(open('/tmp/pg-out.json'))
+          assert all(o[k] is True for k in ('CF','CR','CG','CE'))
+          PY
+          after=$(sha256sum cosmic-love-infinity-prime-godel-2kb.sh | cut -d' ' -f1)
+          test "$before" = "$after"
+          sh -n cosmic-love-infinity-prime-godel-2kb.sh
