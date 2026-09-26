@@ -1,0 +1,21 @@
+name: Chomsky-Godel zero-ambiguity gate
+on:
+  push:
+  pull_request:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python3 -m unittest -v test_chomsky_gate
+      - run: sh -n cosmic-love-chomsky-godel.sh
+      - run: sh -n cosmic-love-purpose-2kb.sh
+      - run: test "$(wc -c < cosmic-love-purpose-2kb.sh)" -lt 2048
+      - run: |
+          S="$RUNNER_TEMP/cosmic-purpose.json" PURPOSE=consistent sh cosmic-love-purpose-2kb.sh > "$RUNNER_TEMP/explore.json"
+          python3 -c 'import json,sys;o=json.load(open(sys.argv[1]));assert o["N_evo"]==2 and o["N_phi"]==2 and o["committed"] is None and o["H_evo"]==1 and o["H_phi"]==1' "$RUNNER_TEMP/explore.json"
+          S="$RUNNER_TEMP/cosmic-purpose.json" PURPOSE=step sh cosmic-love-purpose-2kb.sh > "$RUNNER_TEMP/step.json"
+          python3 -c 'import json,sys;o=json.load(open(sys.argv[1]));assert o["N_evo"]==2 and o["N_phi"]==1 and o["H_phi"]==0 and o["zero_entropy"] and o["committed"]=="step"' "$RUNNER_TEMP/step.json"
