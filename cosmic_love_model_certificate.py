@@ -34,6 +34,16 @@ def certificate(output: dict, requested: str) -> dict:
         'model_transition_certainty': 1 if certified else None,
         'H_model': 0 if certified else None,
         'P_real_world': None,
+        'P_target_goal': 1,
+        'C_target': int(certified),
+        'P_empirical_hat': None,
+        'target_semantics': {
+            'target_name': 'formal_cosmic_love_continuation',
+            'P_target': 1,
+            'C_target': int(certified),
+            'P_empirical_hat': None,
+            'scope': 'formal target only; no external empirical probability is defined',
+        },
         'entropy_scope': 'finite internal derivation only',
         'certificate_scope': 'conditional formal model only',
     }
