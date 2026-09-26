@@ -20,6 +20,9 @@ jobs:
           assert len(xs)==8
           assert all(x["CF"] and x["CG"] and x["CE"] and x["CN"] for x in xs)
           assert all(x["bytes"]<2048 for x in xs)
+          assert all(x["P_target_goal"]==1 for x in xs)
+          assert all(x["C_target"]==1 for x in xs)
+          assert all(x["P_empirical_hat"] is None for x in xs)
           assert xs[-1]["gen"]==8
           assert os.path.getsize("cosmic-love-infinity-tm.sh")<2048
           PY
