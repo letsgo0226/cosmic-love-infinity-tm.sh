@@ -20,6 +20,11 @@ class ChomskyGateTests(unittest.TestCase):
         self.assertEqual(out['P_target_goal'], 1)
         self.assertEqual(out['C_target'], expected_certificate)
         self.assertIsNone(out['P_empirical_hat'])
+        self.assertEqual(out['A_CL'], 1)
+        self.assertEqual(out['G_CL'], 1)
+        self.assertEqual(out['temporal_formula'], 'G(CL)')
+        self.assertEqual(out['preservation']['state_rule'], 'CL(s) -> CL(T(s))')
+        self.assertIn('preserves CL', out['preservation']['rewrite_rule'])
         self.assertEqual(out['target_semantics']['P_target'], 1)
         self.assertEqual(out['target_semantics']['C_target'], expected_certificate)
         self.assertIsNone(out['target_semantics']['P_empirical_hat'])
@@ -47,7 +52,7 @@ class ChomskyGateTests(unittest.TestCase):
             self.assertIsNone(rewind['P_real_world'])
             self.assert_target_semantics(rewind, 1)
 
-    def test_direction_mismatch_fails_certificate(self):
+    def test_direction_mismatch_fails_certificate_but_not_model_axiom(self):
         out = {'CF': True, 'CR': True, 'CG': True, 'CE': True, 'rev': False}
         cert = certificate(out, 'rewind')
         self.assertFalse(cert['C_direction'])
@@ -56,7 +61,7 @@ class ChomskyGateTests(unittest.TestCase):
         self.assertIsNone(cert['P_real_world'])
         self.assert_target_semantics(cert, 0)
 
-    def test_failed_invariant_fails_certificate(self):
+    def test_failed_invariant_fails_execution_certificate_but_not_axiom(self):
         out = {'CF': True, 'CR': True, 'CG': False, 'CE': True, 'rev': False}
         cert = certificate(out, 'step')
         self.assertFalse(cert['C_CL'])
