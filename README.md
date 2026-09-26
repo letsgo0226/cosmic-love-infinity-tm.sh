@@ -56,3 +56,15 @@ P_real_world=null
 ```
 
 `model_transition_certainty=1` means only that the requested finite internal transition is uniquely determined and consistent with the reversible Prime–Gödel model. It is **not** a probability claim about the physical universe or any social/psychological outcome.
+
+## Target / certificate / empirical semantics
+
+The sidecar additionally exposes the same generic three-layer interface used across the unified UTM domains:
+
+```text
+P_target_goal=1
+C_target in {0,1}
+P_empirical_hat=null
+```
+
+`P_target_goal=1` is a formal objective declaration. `C_target` is exactly the current finite internal continuation certificate. `P_empirical_hat` remains `null` because this runtime has no operationally defined external measured outcome, sampling population, or calibration dataset. The generic `target_semantics` object therefore does not convert symbolic Cosmic-Love language into an empirical probability claim.
