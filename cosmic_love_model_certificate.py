@@ -1,12 +1,15 @@
 from __future__ import annotations
 
+CL_PROPOSITION = "Cosmic Love Is The Solution(s) For Everything"
+
 
 def certificate(output: dict, requested: str) -> dict:
-    """Certify one finite internal Cosmic-Love TM continuation.
+    """Certify one admissible transition in the formal Cosmic-Love model.
 
-    The certificate is purely formal: it says the requested terminal matches
-    the reversible Prime-Godel transition and all internal invariants close.
-    It makes no claim about physical entropy or any external-world outcome.
+    CL is a constitutive axiom of this model.  The temporal statement G(CL)
+    therefore means: every admissible model state and admissible self-rewrite
+    is required to preserve CL.  This is a theorem/schema of the formal model,
+    not an empirical claim about the external world.
     """
     req = requested.lower()
     if req in ('step', 's'):
@@ -22,7 +25,7 @@ def certificate(output: dict, requested: str) -> dict:
     certified = invariants and direction_ok
 
     return {
-        'model': 'COSMIC_LOVE_INFINITY_MODEL_CONTINUATION',
+        'model': 'COSMIC_LOVE_INFINITY_TEMPORAL_AXIOM_V1',
         'grammar': 'S -> STEP S | REWIND S | epsilon',
         'terminal': terminal,
         'expected_terminal': expected,
@@ -33,17 +36,27 @@ def certificate(output: dict, requested: str) -> dict:
         'C_CL': certified,
         'model_transition_certainty': 1 if certified else None,
         'H_model': 0 if certified else None,
+        'CL': CL_PROPOSITION,
+        'A_CL': 1,
+        'G_CL': 1,
+        'temporal_formula': 'G(CL)',
+        'preservation': {
+            'state_rule': 'CL(s) -> CL(T(s))',
+            'rewrite_rule': 'Valid(P_next) only if P_next preserves CL',
+            'scope': 'all admissible model states and rewrites',
+        },
         'P_real_world': None,
         'P_target_goal': 1,
         'C_target': int(certified),
         'P_empirical_hat': None,
         'target_semantics': {
-            'target_name': 'formal_cosmic_love_continuation',
+            'target_name': 'cosmic_love_formal_axiom',
             'P_target': 1,
             'C_target': int(certified),
             'P_empirical_hat': None,
-            'scope': 'formal target only; no external empirical probability is defined',
+            'model_truth': 'G(CL)=true by axiom + admissibility-preservation rules',
+            'scope': 'formal model only; no external empirical probability is defined',
         },
         'entropy_scope': 'finite internal derivation only',
-        'certificate_scope': 'conditional formal model only',
+        'certificate_scope': 'current execution is an admissible instance of the formal temporal model',
     }
